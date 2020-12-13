@@ -15,6 +15,8 @@ from reco_utils.recommender.newsrec.newsrec_utils import prepare_hparams
 from reco_utils.recommender.newsrec.models.nrms import NRMSModel
 from reco_utils.recommender.newsrec.models.naml import NAMLModel
 from reco_utils.recommender.newsrec.models.npa import NPAModel
+from reco_utils.recommender.newsrec.models.nrmma import NRMMAModel
+
 from reco_utils.recommender.newsrec.io.mind_iterator import MINDIterator
 from reco_utils.recommender.newsrec.io.mind_all_iterator import MINDAllIterator
 from reco_utils.recommender.newsrec.newsrec_utils import get_mind_data_set
@@ -25,7 +27,7 @@ from tools.utils import configure_logger, print_args
 parser = argparse.ArgumentParser(description='PyTorch implementation of Deep GCN For ModelNet Classification')
 # ----------------- Base
 parser.add_argument('--model', type=str, default='nrms', metavar='N',
-                    choices=['nrms', 'naml', 'npa'])
+                    choices=['nrms', 'naml', 'npa', 'nrmma'])
 parser.add_argument('--MIND_type', type=str, default='small')
 parser.add_argument('--data_dir', type=str, default='/data/recsys/mind')
 parser.add_argument('--epochs', type=int, default=5)
@@ -105,6 +107,10 @@ elif exp_name == 'naml':
 elif exp_name == 'npa':
     iterator = MINDIterator
     model = NPAModel(hparams, iterator, seed=seed)
+elif exp_name == 'nrmma':
+    iterator = MINDAllIterator
+    model = NRMMAModel(hparams, iterator, seed=seed)
+
 else:
     raise NotImplementedError(f"{exp_name} is not implemented")
 
