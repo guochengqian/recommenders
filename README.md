@@ -2,6 +2,18 @@
 
 [![Documentation Status](https://readthedocs.org/projects/microsoft-recommenders/badge/?version=latest)](https://microsoft-recommenders.readthedocs.io/en/latest/?badge=latest)
 
+## Quick start for MIND-Small news recommendation (CS340 Homework)
+1. Install the environment: see the [setup guide](SETUP.md)
+2. Run experiment by: 
+    ```bash
+    cd examples/00_quick_start
+    python mind.py --model nrmma
+    ```
+
+    Supported models are: NRMMA (my proposed network), NPA, NRMS, NAML.   
+    Datasets and Experiment logs will be automatically saved to `examples/data/mind/small`.     
+    My experiment logs can be found at `examples/data/mind/small/cs340hw4_guochengqian.zip`.  
+    
 ## What's New (October 19, 2020)
 
 [Microsoft News Recommendation Competition Winners Announced, Leaderboard Reopen!](https://msnews.github.io/competition.html)

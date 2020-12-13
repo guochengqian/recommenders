@@ -42,7 +42,7 @@ seed = args.seed
 batch_size = args.batch_size
 
 # Options: demo, small, large
-MIND_type = args.MIND_type
+MIND_type = args.MIND_type.lower()
 data_dir = args.data_dir
 data_path = os.path.join(data_dir, MIND_type)
 
