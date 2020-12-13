@@ -14,7 +14,7 @@ __all__ = ["NRMMAModel"]
 
 
 class NRMMAModel(BaseModel):
-    """NRMMAModel model(Neural News Recommendation with Multi-Head Multi-View Attention)
+    """NRMMAModel model(Neural News Recommendation via Multi-Head Multi-View Attention)
         Guocheng Qian
 
     Attributes:
@@ -115,6 +115,8 @@ class NRMMAModel(BaseModel):
         click_news_presents = layers.TimeDistributed(newsencoder)(
             his_input_title_body_verts
         )
+
+        # multi-head attention module.
         y = SelfAttention(hparams.head_num, hparams.head_dim, seed=self.seed)(
             [click_news_presents] * 3
         )
@@ -171,6 +173,7 @@ class NRMMAModel(BaseModel):
             [title_repr, body_repr, vert_repr, subvert_repr]
         )
 
+        # multi-head attention module.
         y = layers.Dropout(hparams.dropout)(concate_repr)
         y = SelfAttention(hparams.head_num, hparams.head_dim, seed=self.seed)([y, y, y])
         y = layers.Dropout(hparams.dropout)(y)
