@@ -6,7 +6,6 @@ import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.keras import layers
 
-
 from reco_utils.recommender.newsrec.models.base_model import BaseModel
 from reco_utils.recommender.newsrec.models.layers import AttLayer2, SelfAttention
 
@@ -27,7 +26,7 @@ class NRMSModel(BaseModel):
     """
 
     def __init__(
-        self, hparams, iterator_creator, seed=None,
+            self, hparams, iterator_creator, seed=None,
     ):
         """Initialization steps for NRMS.
         Compared with the BaseModel, NRMS need word embedding.

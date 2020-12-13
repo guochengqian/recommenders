@@ -8,7 +8,8 @@ import numpy as np
 from tqdm import tqdm
 import tensorflow as tf
 from tensorflow import keras
-import shutil
+import logging
+
 
 from reco_utils.recommender.deeprec.deeprec_utils import cal_metric
 
@@ -267,7 +268,7 @@ class BaseModel:
             eval_time = eval_end - eval_start
 
             if test_news_file is not None:
-                print(
+                logging.info(
                     "at epoch {0:d}".format(epoch)
                     + "\ntrain info: "
                     + train_info
@@ -277,14 +278,14 @@ class BaseModel:
                     + test_info
                 )
             else:
-                print(
+                logging.info(
                     "at epoch {0:d}".format(epoch)
                     + "\ntrain info: "
                     + train_info
                     + "\neval info: "
                     + eval_info
                 )
-            print(
+            logging.info(
                 "at epoch {0:d} , train time: {1:.1f} eval time: {2:.1f}".format(
                     epoch, train_time, eval_time
                 )

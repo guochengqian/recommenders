@@ -70,13 +70,14 @@ if not os.path.exists(train_news_file):
     download_deeprec_resources(mind_url, os.path.join(data_path, 'train'), mind_train_dataset)
     
 if not os.path.exists(valid_news_file):
-    download_deeprec_resources(mind_url,                                os.path.join(data_path, 'valid'), mind_dev_dataset)
+    download_deeprec_resources(mind_url, os.path.join(data_path, 'valid'), mind_dev_dataset)
 if not os.path.exists(yaml_file):
-    download_deeprec_resources(r'https://recodatasets.blob.core.windows.net/newsrec/',                                os.path.join(data_path, 'utils'), mind_utils)
+    download_deeprec_resources(r'https://recodatasets.blob.core.windows.net/newsrec/',
+                               os.path.join(data_path, 'utils'), mind_utils)
 
 
 # ## Create hyper-parameters
-logging.info(f"create hyper-paremeters by loading the file {yaml_file}")
+logging.info(f"create hyper-parameters by loading the file {yaml_file}")
 hparams = prepare_hparams(yaml_file, 
                           wordEmb_file=wordEmb_file,
                           wordDict_file=wordDict_file, 
@@ -106,7 +107,6 @@ model.fit(train_news_file, train_behaviors_file, valid_news_file, valid_behavior
           model_path=model_path, model_name=model_name)
 res_syn = model.run_eval(valid_news_file, valid_behaviors_file)
 logging.info(res_syn)
-
 
 
 # ## Reference
