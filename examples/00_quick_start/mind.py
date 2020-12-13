@@ -9,6 +9,8 @@ import os
 import tensorflow as tf
 import logging
 import argparse
+import time
+import uuid
 
 from reco_utils.recommender.deeprec.deeprec_utils import download_deeprec_resources 
 from reco_utils.recommender.newsrec.newsrec_utils import prepare_hparams
@@ -44,8 +46,10 @@ MIND_type = args.MIND_type
 data_dir = args.data_dir
 data_path = os.path.join(data_dir, MIND_type)
 
-exp_name = args.model
-exp_path = os.path.join(data_path, exp_name)
+model_type = args.model
+timestamp = time.strftime('%Y%m%d-%H%M%S')
+exp_name = '-'.join((model_type, timestamp, str(uuid.uuid4())))
+exp_path = os.path.join(data_path, model_type, exp_name)
 if not os.path.exists(exp_path):
     os.makedirs(exp_path)
 
@@ -67,7 +71,7 @@ userDict_file = os.path.join(data_path, "utils", "uid2index.pkl")
 wordDict_file = os.path.join(data_path, "utils", "word_dict.pkl")
 vertDict_file = os.path.join(data_path, "utils", "vert_dict.pkl")
 subvertDict_file = os.path.join(data_path, "utils", "subvert_dict.pkl")
-yaml_file = os.path.join(data_path, "utils", f'{exp_name}.yaml')
+yaml_file = os.path.join(data_path, "utils", f'{model_type}.yaml')
 
 mind_url, mind_train_dataset, mind_dev_dataset, mind_utils = get_mind_data_set(MIND_type)
 
@@ -98,16 +102,16 @@ logging.info(hparams)
 # ## Train the NRMS model
 
 
-if exp_name == 'nrms':
+if model_type == 'nrms':
     iterator = MINDIterator
     model = NRMSModel(hparams, iterator, seed=seed)
-elif exp_name == 'naml':
+elif model_type == 'naml':
     iterator = MINDAllIterator
     model = NAMLModel(hparams, iterator, seed=seed)
-elif exp_name == 'npa':
+elif model_type == 'npa':
     iterator = MINDIterator
     model = NPAModel(hparams, iterator, seed=seed)
-elif exp_name == 'nrmma':
+elif model_type == 'nrmma':
     iterator = MINDAllIterator
     model = NRMMAModel(hparams, iterator, seed=seed)
 
@@ -115,8 +119,8 @@ else:
     raise NotImplementedError(f"{exp_name} is not implemented")
 
 # In[8]:
-model_path = os.path.join(exp_path, exp_name)
-model_name = exp_name + '_ckpt'
+model_path = os.path.join(exp_path, model_type)
+model_name = model_type + '_ckpt'
 model.fit(train_news_file, train_behaviors_file, valid_news_file, valid_behaviors_file,
           model_path=model_path, model_name=model_name)
 res_syn = model.run_eval(valid_news_file, valid_behaviors_file)
