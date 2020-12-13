@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
-
+import os
 from os.path import join
 import abc
 import time
@@ -8,6 +8,7 @@ import numpy as np
 from tqdm import tqdm
 import tensorflow as tf
 from tensorflow import keras
+import shutil
 
 from reco_utils.recommender.deeprec.deeprec_utils import cal_metric
 
@@ -179,6 +180,10 @@ class BaseModel:
 
         return pred_rslt, eval_label, imp_index
 
+    def save_weights(self, model_path, model_name):
+        os.makedirs(model_path, exist_ok=True)
+        self.model.save_weights(os.path.join(model_path, model_name))
+
     def fit(
         self,
         train_news_file,
@@ -187,6 +192,9 @@ class BaseModel:
         valid_behaviors_file,
         test_news_file=None,
         test_behaviors_file=None,
+        model_path='./ckpt/',
+        model_name='ckpt',
+        save_metric='group_auc'
     ):
         """Fit the model with train_file. Evaluate the model on valid_file per epoch to observe the training status.
         If test_news_file is not None, evaluate it too.
@@ -200,6 +208,7 @@ class BaseModel:
             obj: An instance of self.
         """
 
+        best_value = 0.
         for epoch in range(1, self.hparams.epochs + 1):
             step = 0
             self.hparams.current_epoch = epoch
@@ -245,6 +254,7 @@ class BaseModel:
                     for item in sorted(eval_res.items(), key=lambda x: x[0])
                 ]
             )
+
             if test_news_file is not None:
                 test_res = self.run_eval(test_news_file, test_behaviors_file)
                 test_info = ", ".join(
@@ -279,6 +289,10 @@ class BaseModel:
                     epoch, train_time, eval_time
                 )
             )
+            self.save_weights(model_path, model_name)
+            if best_value < eval_res[save_metric]:
+                best_value = eval_res[save_metric]
+                self.save_weights(model_path, model_name+'_best')
 
         return self
 

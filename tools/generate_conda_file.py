@@ -64,7 +64,7 @@ CONDA_BASE = {
 CONDA_PYSPARK = {"pyarrow": "pyarrow>=0.8.0", "pyspark": "pyspark==2.4.5"}
 
 CONDA_GPU = {
-    "fastai": "fastai==1.0.46",
+    "fastai": "fastai==1.0.61",  # 1.0.46 fails to install: fastai 1.0.46 requires typing, which is not installed
     "numba": "numba>=0.38.1",
     "pytorch": "pytorch>=1.0.0",
     "cudatoolkit": "cudatoolkit=10.0",
@@ -78,7 +78,7 @@ PIP_BASE = {
     "black": "black>=18.6b4",
     "category_encoders": "category_encoders>=1.3.0",
     "dataclasses": "dataclasses>=0.6",
-    "hyperopt": "hyperopt==0.1.1",
+    "hyperopt": "hyperopt==0.1.2",  # nni 1.5 requres hyperopt==0.1.2
     "idna": "idna==2.7",
     "locustio": "locustio==0.11.0",
     "memory-profiler": "memory-profiler>=0.54.0",
